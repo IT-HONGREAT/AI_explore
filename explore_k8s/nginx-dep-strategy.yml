@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx
+      tier: app
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+        tier: app
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          livenessProbe:
+            httpGet:
+              path: / 
+              port: 3000
